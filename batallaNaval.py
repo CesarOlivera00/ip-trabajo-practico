@@ -22,11 +22,7 @@ EstadoJuego = tuple[
 def cantidadDeBarcosDeTamaño(barcos: list[BarcoEnGrilla], tamaño: int) -> int:
     """ Agregar docstring acá
     """
-    cantidad : int = 0
-    for barco in barcos:
-        if len(barco) == tamaño:
-            cantidad += 1
-    return cantidad
+    return False # TODO: Implementame
 
 ## Ejercicio 2
 
