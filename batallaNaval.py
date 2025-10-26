@@ -34,8 +34,15 @@ def nuevoJuego(cantidadDeFilas: int, cantidadDeColumnas: int, barcosDisponibles:
             [UNO],
             nuevoTablero(cantidadDeFilas, cantidadDeColumnas),
             nuevoTablero(cantidadDeFilas, cantidadDeColumnas))
-    
-    # TODO: Implementame
+
+# en el return de ejemplo en la parte de "barcosDisponibles" devuelve [3,3,2]; creo que haciendo referencia a que cuando inicia
+# el juego la hay 3 barcos que se disponen para colocar en la grilla local (dos de longitud 3 y uno de longitud 2), la funcion
+# que hice no devuelve una lista así, devuelve barcosDisponibles tal cual se metió a la funcion, no se si lo correcto sería
+# hacer una funcion que tambien a partir del numero metido(q es la cantidad de barcos que voy a disponer para colocar) cree
+# una lista con barcos de longitudes al azar, o si esta bien q devuelva el barcosDisponibles asi como está (porque en 
+# el enunciado en el ejemplo lo devuelven asi como está)
+
+"""    #TODO: Implementame
     return((5,5), [3, 3, 2], [UNO],
             ([[VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
              [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
@@ -50,6 +57,8 @@ def nuevoJuego(cantidadDeFilas: int, cantidadDeColumnas: int, barcosDisponibles:
              [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
              [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO]])
     )
+"""
+
 
 ## Ejercicio 3
 
