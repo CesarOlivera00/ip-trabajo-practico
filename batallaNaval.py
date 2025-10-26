@@ -11,13 +11,30 @@ def cantidadDeBarcosDeTamaño(barcos: list[BarcoEnGrilla], tamaño: int) -> int:
 
 ## Ejercicio 2
 
-def nuevoJuego(
-        cantidadDeFilas: int,
-        cantidadDeColumnas: int,
-        barcosDisponibles: list[Barco]
-    ) -> EstadoJuego:
-    """ Agregar docstring acá
-    """
+def grillaVacia(cantidadDeFilas: int, cantidadDeColumnas: int) -> Grilla:
+    """Función que arma cada una de las grillas a partir de la cantidad de filas y columnas"""
+    grilla_res : Grilla = []
+    fila_vacia : list[str] = ["VACÍO"] * cantidadDeColumnas
+    i : int = 0
+    while i < cantidadDeFilas:
+        grilla_res.append(fila_vacia.copy())
+        i += 1
+    return grilla_res
+
+def nuevoTablero(cantidadDeFilas: int, cantidadDeColumnas: int) -> Tablero:
+    """Funcion que arma cada tablero para cada jugador a partir de las dos grillas vacias; cada uno tiene ahora
+    un tablero con una grilla local, y una grilla oponente"""
+    return(grillaVacia(cantidadDeFilas, cantidadDeColumnas), grillaVacia(cantidadDeFilas, cantidadDeColumnas))
+
+def nuevoJuego(cantidadDeFilas: int, cantidadDeColumnas: int, barcosDisponibles: list[Barco]) -> EstadoJuego:
+    """ Funcion que devuelve el estado de Juego inicial, indicando, en una tupla, las dimensiones de cada una de las grillas,
+     la longitud de cada uno de los barcos que se disponen en forma de lista, y los dos tableros vacíos """
+    return((cantidadDeFilas, cantidadDeColumnas),
+            barcosDisponibles,
+            [UNO],
+            nuevoTablero(cantidadDeFilas, cantidadDeColumnas),
+            nuevoTablero(cantidadDeFilas, cantidadDeColumnas))
+    
     # TODO: Implementame
     return((5,5), [3, 3, 2], [UNO],
             ([[VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
