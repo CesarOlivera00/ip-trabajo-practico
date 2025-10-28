@@ -62,7 +62,25 @@ def esEstadoDeJuegoVálido(estadoDeJuego: EstadoJuego) -> bool:
 def dispararEnPosición(estado_juego: EstadoJuego, posición: Posición) -> ResultadoDisparo:
     """ Agregar docstring acá
     """
-    return NADA # TODO: Implementame
+
+    ##def celdaEnPosición(grilla: Grilla, posición: Posición) -> Celda:
+    valorCelda: Celda = celdaEnPosición(grillaLocal(tableroDeJugador(estado_juego, turnoContrario(turno(estado_juego)))),posición)
+
+    if valorCelda == Celda.VACÍO :
+        cambiarCeldaGrilla(grillaLocal(tableroDeJugador(estado_juego, turnoContrario(turno(estado_juego)))),posición, Celda.AGUA)
+        cambiarCeldaGrilla(grillaOponente(tableroDeJugador(estado_juego, turno(estado_juego))),posición, Celda.AGUA)
+    else:
+        cambiarCeldaGrilla(grillaOponente(tableroDeJugador(estado_juego, turno(estado_juego))),posición, Celda.BARCO)
+
+    cambiarTurno(estado_juego)
+
+    return TOCADO if valorCelda == Celda.BARCO else NADA
+
+
+
+def turnoContrario(jugador: Jugador):
+    return Jugador.DOS if jugador == Jugador.Uno else Jugador.UNO
+
 
 
 ## Ejercicio 5
