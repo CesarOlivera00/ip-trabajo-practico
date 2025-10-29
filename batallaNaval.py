@@ -61,26 +61,30 @@ def esEstadoDeJuegoVálido(estadoDeJuego: EstadoJuego) -> bool:
 
 def dispararEnPosición(estado_juego: EstadoJuego, posición: Posición) -> ResultadoDisparo:
     """ Agregar docstring acá
+        Cambia el turno del jugador y modifica las grillas de los tableros de ambos jugadores segun lo que se encuentre en la posicion
+        Args: 
+            estado_juego (EstadoJuego):
+            posicion (Posicion):
+
+        Returs:
+            TOCADO Si en la posicion existe un barco y Nada en caso contrario.
+         
     """
 
-    ##def celdaEnPosición(grilla: Grilla, posición: Posición) -> Celda:
     valorCelda: Celda = celdaEnPosición(grillaLocal(tableroDeJugador(estado_juego, turnoContrario(turno(estado_juego)))),posición)
 
     if valorCelda == Celda.VACÍO :
-        cambiarCeldaGrilla(grillaLocal(tableroDeJugador(estado_juego, turnoContrario(turno(estado_juego)))),posición, Celda.AGUA)
-        cambiarCeldaGrilla(grillaOponente(tableroDeJugador(estado_juego, turno(estado_juego))),posición, Celda.AGUA)
+        cambiarCeldaGrilla(grillaLocal(tableroDeJugador(estado_juego, turnoContrario(turno(estado_juego)))),posición, AGUA)
+        cambiarCeldaGrilla(grillaOponente(tableroDeJugador(estado_juego, turno(estado_juego))),posición, AGUA)
     else:
-        cambiarCeldaGrilla(grillaOponente(tableroDeJugador(estado_juego, turno(estado_juego))),posición, Celda.BARCO)
+        cambiarCeldaGrilla(grillaOponente(tableroDeJugador(estado_juego, turno(estado_juego))),posición, BARCO)
 
     cambiarTurno(estado_juego)
 
-    return TOCADO if valorCelda == Celda.BARCO else NADA
-
-
+    return TOCADO if valorCelda == BARCO else NADA
 
 def turnoContrario(jugador: Jugador):
-    return Jugador.DOS if jugador == Jugador.Uno else Jugador.UNO
-
+    return DOS if jugador == UNO else UNO
 
 
 ## Ejercicio 5
