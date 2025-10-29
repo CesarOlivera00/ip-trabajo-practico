@@ -210,11 +210,6 @@ class InterfazBatallaNaval:
 
     def manejar_disparo(self, fila: int, columna: int):
         """Maneja el evento de disparo en una celda de la grilla oponente"""
-        
-        grilla_oponente: Grilla = grillaOponente(tableroDeJugador(self.estado_juego, turno(self.estado_juego)))
-        posición: Posición = (chr(ord('A') + fila), (columna + 1))
-        if celdaEnPosición(grilla_oponente, posición) != VACÍO:
-            return
 
         self.ManejarDisparo((chr(ord('A') + fila), (columna + 1)))
         self.ManejarDisparo(self.disparoPC())
