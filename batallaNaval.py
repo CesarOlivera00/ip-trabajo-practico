@@ -100,7 +100,7 @@ def seReflejanLosAtaquesCorrectamente(grilla1: Grilla, grilla2: Grilla) -> bool:
         for j in range(celda):
             if grilla1[i][j] == "BARCO" and grilla2[i][j] != "TOCADO":
                 return False
-            if grilla1[i][j] == "AGUA" and grilla2[i][j] != "VACÍO":
+            elif grilla1[i][j] == "AGUA" and grilla2[i][j] != "VACÍO":
                 return False
     return True
 
