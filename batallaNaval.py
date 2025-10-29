@@ -14,7 +14,7 @@ def cantidadDeBarcosDeTamaño(barcos: list[BarcoEnGrilla], tamaño: int) -> int:
 def grillaVacia(cantidadDeFilas: int, cantidadDeColumnas: int) -> Grilla:
     """Función que arma cada una de las grillas a partir de la cantidad de filas y columnas"""
     grilla_res : Grilla = []
-    fila_vacia : list[str] = ["VACÍO"] * cantidadDeColumnas
+    fila_vacia : list[str] = [VACÍO] * cantidadDeColumnas
     i : int = 0
     while i < cantidadDeFilas:
         grilla_res.append(fila_vacia.copy())
@@ -35,27 +35,7 @@ def nuevoJuego(cantidadDeFilas: int, cantidadDeColumnas: int, barcosDisponibles:
             nuevoTablero(cantidadDeFilas, cantidadDeColumnas),
             nuevoTablero(cantidadDeFilas, cantidadDeColumnas))
 
-"""    #TODO: Implementame
-    return((5,5), [3, 3, 2], [UNO],
-            ([[VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO]],
-            [[VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO]]),
-            ([[VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO]],
-            [[VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO], [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO],
-             [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO]])
-    )
-"""
-
 ## Ejercicio 3
-
-# ACLARACION: ESTE EJERCICIO ESTA INCOMPLETO Y NO VA A EJECUTAR PORQUE EN LA FUNCION "coincidenBarcosEnGrilla" UTILIZA LA FUNCION 
-# "BARCOSENGRILLA" QUE TIENE QUE SER IMPLEMENTADA EN EL EJERCICIO 5
 
 def tamaños(barcos: list[BarcoEnGrilla]) -> list[int]:
     """ Funcion que toma una lista de tipo BarcoEnGrilla y a partir de ella hace una lista con los tamaños de cada barco; es decir
@@ -98,10 +78,9 @@ def seReflejanLosAtaquesCorrectamente(grilla1: Grilla, grilla2: Grilla) -> bool:
     celda : int = len(grilla1[0])
     for i in range(len(grilla1)):
         for j in range(celda):
-            if grilla1[i][j] == "BARCO" and grilla2[i][j] != "TOCADO":
-                return False
-            elif grilla1[i][j] == "AGUA" and grilla2[i][j] != "VACÍO":
-                return False
+            if grilla1[i][j] != VACÍO:
+                if grilla1[i][j] != grilla2[i][j]:
+                    return False
     return True
 
 def coincidenPosicionesAtacadas(tablero: Tablero, tableroOponente: Tablero) -> bool:
@@ -114,7 +93,7 @@ def esEstadoDeJuegoVálido(estadoDeJuego: EstadoJuego) -> bool:
     """ Funcion que engloba todo lo que se tiene que cumplir para que el estado de juego sea válido """
     if (cantidadDeFilasEstadoJuego(estadoDeJuego) < 1 or cantidadDeFilasEstadoJuego(estadoDeJuego) > 26
         or cantidadDeColumnasEstadoJuego(estadoDeJuego) <= 0 
-        or barcosDisponibles(estadoDeJuego) < 0
+        or len(barcosDisponibles(estadoDeJuego)) < 0
         or not tableroValidoEnJuego(tableroDeJugador(estadoDeJuego, UNO), estadoDeJuego)
         or not tableroValidoEnJuego(tableroDeJugador(estadoDeJuego, DOS), estadoDeJuego)
         or not coincidenPosicionesAtacadas(tableroDeJugador(estadoDeJuego,UNO), tableroDeJugador(estadoDeJuego,DOS))):
