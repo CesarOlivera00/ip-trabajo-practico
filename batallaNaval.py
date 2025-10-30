@@ -39,6 +39,7 @@ def grillaVacia(cantidadDeFilas: int, cantidadDeColumnas: int) -> Grilla:
         i += 1
     return grilla_res
 
+
 def nuevoTablero(cantidadDeFilas: int, cantidadDeColumnas: int) -> Tablero:
     """Funcion que arma cada tablero para cada jugador a partir de las dos grillas vacias; cada uno tiene ahora
     un tablero con una grilla local, y una grilla oponente"""
@@ -49,7 +50,7 @@ def nuevoJuego(cantidadDeFilas: int, cantidadDeColumnas: int, barcosDisponibles:
      la longitud de cada uno de los barcos que se disponen en forma de lista, y los dos tableros vacíos """
     return((cantidadDeFilas, cantidadDeColumnas),
             barcosDisponibles,
-            [UNO],
+            "UNO",
             nuevoTablero(cantidadDeFilas, cantidadDeColumnas),
             nuevoTablero(cantidadDeFilas, cantidadDeColumnas))
 
@@ -114,7 +115,7 @@ def esEstadoDeJuegoVálido(estadoDeJuego: EstadoJuego) -> bool:
     """ Funcion que engloba todo lo que se tiene que cumplir para que el estado de juego sea válido """
     if (cantidadDeFilasEstadoJuego(estadoDeJuego) < 1 or cantidadDeFilasEstadoJuego(estadoDeJuego) > 26
         or cantidadDeColumnasEstadoJuego(estadoDeJuego) <= 0 
-        or len(barcosDisponibles(estadoDeJuego)) < 0
+        or len(barcosDisponibles(estadoDeJuego)) <= 0
         or not tableroValidoEnJuego(tableroDeJugador(estadoDeJuego, UNO), estadoDeJuego)
         or not tableroValidoEnJuego(tableroDeJugador(estadoDeJuego, DOS), estadoDeJuego)
         or not coincidenPosicionesAtacadas(tableroDeJugador(estadoDeJuego,UNO), tableroDeJugador(estadoDeJuego,DOS))):
@@ -154,9 +155,106 @@ def turnoContrario(jugador: Jugador):
 ## Ejercicio 5
 
 def barcosEnGrilla(grilla: Grilla) -> list[BarcoEnGrilla]:
-    """ Agregar docstring acá
+    """ Recorre la *grilla* completa para obtener las posiciones de ocupadas por barcos.
+        PRE: esGrillaVálida(grilla)
+        Args:
+            grilla (Grilla): La grilla que contiene los barcos a ubicar.
+        Returns:
+            Lista de los barcos (list[BarcoEnGrilla]) encontrados en la * grilla*.
     """
-    return [] # TODO: Implementame
+    barcosEnGrilla:list[BarcoEnGrilla] = []
 
+    for filaNro in range(cantidadDeFilasGrilla(grilla)):
+        recorrerFilaYGuardarPosicionesDeBarcosEnGrilla(filaNro, grilla, barcosEnGrilla)
 
+    return barcosEnGrilla
+
+def recorrerFilaYGuardarPosicionesDeBarcosEnGrilla(filaNro:int, grilla:Grilla, barcosEnGrilla:list[BarcoEnGrilla]) -> None:
+    """ Recorre la fila *filaNro* de una grilla y guardas las posiciones de los barcos, en esa fila, en una lista de BarcoEnGrilla.
+        PRE: esGrillaVálida(grilla)
+        PRE: 0 <= *filaNro* < cantidadDeFilasGrilla(grilla)
+        Args:
+            filaNro (int): El nro de fila a recorrer de la grilla.
+            grilla (Grilla): La grilla que contiene los barcos a ubicar.
+            barcosEnGrilla (list[BarcoEnGrilla]): Lista a llenar con las posiciones de los barcos.
+        Returns:
+            None
+    """
+    for celdaNro in range(cantidadDeColumnasGrilla(grilla)):
+        if enEstaPosicionDeGrillaHayParteDeUnBarco(grilla, filaNro, celdaNro):
+            posicionBarcoEnGrilla:Posición = (letraDeFilaNro(filaNro + 1), celdaNro + 1)
+            encontroPosicionAdyacente:bool = ubicarPosicionEnBarcosEnGrillaAUnaPosicionAdyacenteSiExiste(barcosEnGrilla, posicionBarcoEnGrilla)
+            
+            if not encontroPosicionAdyacente:
+                agregarPosicionEnBarcosEnGrillaComoNuevaLista(barcosEnGrilla, posicionBarcoEnGrilla)
+
+def enEstaPosicionDeGrillaHayParteDeUnBarco(grilla:Grilla, filaNro:int, celdaNro:int) -> bool:
+    """ Dado las cordenadas numericas *filaNro* y *celdaNro*, revisa si en la *grilla* hay un barco.
+        PRE: esGrillaVálida(grilla)
+        PRE: 0 <= *filaNro* < cantidadDeFilasGrilla(grilla)
+        PRE: 0 <= *celdaNro* < cantidadDeColumnasGrilla(grilla)
+        Args:
+            grilla (Grilla): La grilla que contiene los barcos a ubicar.
+            filaNro (int): Numero de fila de la grilla.
+            celdaNro (int): Numero de columna de la grilla.
+        Returns:
+            True si en la posicion indicada por las coordenadas hay un barco. False, en caso contrario.
+    """
+    return grilla[filaNro][celdaNro] == BARCO
+
+def ubicarPosicionEnBarcosEnGrillaAUnaPosicionAdyacenteSiExiste(barcosEnGrilla:list[BarcoEnGrilla], posicionBarcoEnGrilla:Posición) -> bool:
+    """ Ubica la la posicion *posicionBarcoEnGrilla* en la lista correspondiente de *barcosEnGrilla* segun haya una posicion adyacente,
+            si no, crea una nueva lista de posiciones para el barco.
+        PRE: esPosiciónVálida(posicionBarcoEnGrilla)
+        Args:
+            barcosEnGrilla (list[BarcoEnGrilla]): Lista a llenar con las posiciones de los barcos.
+            posicionBarcoEnGrilla (Posición): Posicion a ubicar en *barcosEnGrilla* donde haya una posicion adyacente.
+        Returns:
+            True si ecuentra una posicion adyacente para *posicionBarcoEnGrilla* dentro de *barcosEnGrilla*. False, en caso contrario.
+    """
+    encontroPosicionAdyacente:bool = False
+
+    for indiceBarco in range(len(barcosEnGrilla)):
+        encontroPosicionAdyacente = recorrerPoscionesDelBarcoYGuardarSiLaPosicionEsAdyacente(barcosEnGrilla, indiceBarco, posicionBarcoEnGrilla)
+
+    return encontroPosicionAdyacente
+
+def recorrerPoscionesDelBarcoYGuardarSiLaPosicionEsAdyacente(barcosEnGrilla:list[BarcoEnGrilla], indiceBarco:int, posicionBarcoEnGrilla:Posición) -> bool:
+    """ Dada la lista *barcosEnGrilla* recorre las posiciones segun *indiceBarco* para hayar una posicion adyacente a *posicionBarcoEnGrilla* y sumarla a la lista.
+        PRE: 0 <= indiceBarco < len(barcosEnGrilla)
+        PRE: esPosiciónVálida(posicionBarcoEnGrilla)
+        Args:
+            barcosEnGrilla (list[BarcoEnGrilla]): Lista a llenar con las posiciones de los barcos.
+            indiceBarco (int): Indica el BarcoEnGrilla a recorrer de *barcosEnGrilla*.
+            posicionBarcoEnGrilla (Posición): Posicion a ubicar en *barcosEnGrilla* donde haya una posicion adyacente.
+        Returns:
+            True si ecuentra una posicion adyacente para *posicionBarcoEnGrilla* dentro de *barcosEnGrilla[indiceBarco]*. False, en caso contrario.
+    """
+    encontroPosicionAdyacente = False
+
+    for posicion in barcosEnGrilla[indiceBarco]:
+        if sonPosicionesAdyecentes(posicion, posicionBarcoEnGrilla):
+            barcosEnGrilla[indiceBarco].append(posicionBarcoEnGrilla)
+            encontroPosicionAdyacente = True
+
+    return encontroPosicionAdyacente
+
+def agregarPosicionEnBarcosEnGrillaComoNuevaLista(barcosEnGrilla:list[BarcoEnGrilla], posicionBarcoEnGrilla:Posición) -> None:
+    """ Agrega una nueva lista a *barcosEnGrilla* con un primer elemento *posicionBarcoEnGrilla*.
+        PRE: esPosiciónVálida(posicionBarcoEnGrilla)
+        Args:
+            barcosEnGrilla (list[BarcoEnGrilla]): Lista a llenar con una nueva lista con *posicionBarcoEnGrilla* como primer elemento.
+            posicionBarcoEnGrilla (Posición): Primer elemento de la lista a nueva a agregar en *barcosEnGrilla*.
+        Returns:
+            None
+    """
+    barcosEnGrilla.append([posicionBarcoEnGrilla])
+
+def letraDeFilaNro(numero: int) -> str:
+    """ Describe la letra correspondiente al número de fila *numero*.
+        PRE: 1 <= numero <= 26
+        Args:
+            numero (int): Numero de la fila a convertir a letra.
+    """
+    return chr(numero - 1 + ord('A'))
 
