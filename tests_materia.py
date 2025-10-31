@@ -126,7 +126,5 @@ class barcosEnGrilla_Test(unittest.TestCase):
                                   [VACÍO, VACÍO, VACÍO, VACÍO, VACÍO, BARCO, VACÍO]])
 
 
-
-
 if __name__ == '__main__':
     unittest.main(verbosity=1)

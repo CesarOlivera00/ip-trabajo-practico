@@ -94,22 +94,30 @@ def tableroValidoEnJuego(tablero: Tablero, estadoDeJuego: EstadoJuego) -> bool:
              and grillaVálidaEnJuego(grillaOponente(tablero), estadoDeJuego)
              and coincidenBarcosEnGrilla(barcosDisponibles(estadoDeJuego), grillaLocal(tablero)))
 
+def turnos(grilla: Grilla) -> int:
+    cant_turnos : int = 0
+    for fila in grilla:
+        for celda in fila:
+            if celda != VACÍO:
+                cant_turnos += 1
+    return cant_turnos
+
 def seReflejanLosAtaquesCorrectamente(grilla1: Grilla, grilla2: Grilla) -> bool:
     """ Función que compara la grilla oponente del jugador 1 con la grilla local del jugador 2; devuelve True si los resultados de los 
     ataques realizados a la grilla local fueron correctamente reflejados en la grilla oponente """
     celda : int = len(grilla1[0])
     for i in range(len(grilla1)):
         for j in range(celda):
-            if grilla1[i][j] != VACÍO:
-                if grilla1[i][j] != grilla2[i][j]:
-                    return False
+            if grilla1[i][j] != VACÍO and grilla1[i][j] != grilla2[i][j]:
+                return False
     return True
 
 def coincidenPosicionesAtacadas(tablero: Tablero, tableroOponente: Tablero) -> bool:
     """ Funcion que utiliza seReflejanLosAtaques para que la comparación de posiciones atacadas con las posiciones marcadas sea simetrica
     y funcione para el tablero local y oponente de ambos jugadores """
     return(seReflejanLosAtaquesCorrectamente(grillaOponente(tablero), grillaLocal(tableroOponente))
-           and seReflejanLosAtaquesCorrectamente(grillaOponente(tableroOponente), grillaLocal(tablero)))
+           and seReflejanLosAtaquesCorrectamente(grillaOponente(tableroOponente), grillaLocal(tablero))
+           and (0 <= turnos(grillaOponente(tablero)) - turnos(grillaOponente(tableroOponente)) <= 1))
 
 def esEstadoDeJuegoVálido(estadoDeJuego: EstadoJuego) -> bool:
     """ Funcion que engloba todo lo que se tiene que cumplir para que el estado de juego sea válido """
